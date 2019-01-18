@@ -1,0 +1,20 @@
+{
+  "name": "thundervision",
+  "version": "0.1.0",
+  "description": "A lightweight project starter for the Thundervision team at the Denver Broncos",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "thundervision",
+    "project",
+    "start"
+  ],
+  "author": "Lucas Flora",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^4.0.1",
+    "jquery": "^3.3.1"
+  }
+}
