@@ -14,13 +14,75 @@
     <script>if (window.module) module = window.module;</script>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-    <br>
-    This is going to be the Thundervision app. :D
+    <h1>Thundervision Project Start</h1>
+
+  	<div>
+  	  <form action="/action_page.php">
+  			<!-- Project Title -->
+  	    <label for="ptitle">Project Title</label>
+  			<br>
+  	    <input type="text" id="ptitle" name="projectTitle" placeholder="Project Title" required minlength="5" maxlength="32" autofocus>
+  			<br>
+  			<br>
+  			<!-- Project Destination -->
+  	    <label id="secondaryLabel" for="pdestination">Project Destination</label>
+  			<br>
+  	    <input type="text" id="pdestination" name="projectDestination" placeholder="..." required minlength="2">
+
+  			<label class="browseLabel" id="projectDirectoryLabel" tabindex="0">
+  				<input type="file" class="directoryInput" id="projectDirectoryInput" webkitdirectory mozdirectory  />
+      		<span>Browse</span>
+  			</label>
+  			<br>
+  			<br>
+
+  			<!-- Template Location -->
+  			<label id="secondaryLabel" for="temploc">Template Location</label>
+  			<br>
+  			<input type="text" id="temploc" name="templateLocation" placeholder="..." valid>
+
+  			<label class="browseLabel" id="templateDirectoryLabel" tabindex="0">
+  				<input type="file" class="directoryInput" id="templateDirectoryInput" webkitdirectory mozdirectory  />
+  				<span>Browse</span>
+  			</label>
+  			<br>
+  			<br>
+
+  			<!--After Effects Options -->
+  			<label>Project Type</lable>
+  			<br>
+  			<input type="checkbox" id="ae_checkbox_main" name="afterEffects[]" >
+  			<label class=checkBoxLabelMain for="ae_checkbox_main" id="ae_checkBoxLabelMain" tabindex="0">After Effects</label>
+
+  			<input type="checkbox" id="ae_south_board" name="afterEffects[]" disabled>
+  			<label class="checkBoxLabel" for="ae_south_board" id="ae_0" tabindex="0">South Board</label>
+
+  			<input type="checkbox" id="ae_ribbons" name="afterEffects[]" disabled>
+  			<label class="checkBoxLabel" for="ae_ribbons" id="ae_1" tabindex="0">Ribbons</label>
+
+  			<input type="checkbox" id="ae_16_9" name="afterEffects[]" disabled>
+  			<label class="checkBoxLabel" for="ae_16_9" id="ae_2" tabindex="0">16:9</label>
+  			<br>
+
+  			<!--Premiere Options -->
+  			<input type="checkbox" id="pr_checkbox_main" name="premiere[]">
+  			<label class=checkBoxLabelMain for="pr_checkbox_main" id="pr_checkBoxLabelMain" tabindex="0">Premiere Pro</label>
+
+  			<input type="checkbox" id="pr_south_board" name="premiere[]" disabled>
+  			<label class="checkBoxLabel" for="pr_south_board" id="pr_0" tabindex="0">South Board</label>
+
+  			<input type="checkbox" id="pr_16_9" name="premiere[]" disabled>
+  			<label class="checkBoxLabel" for="pr_16_9" id="pr_1" tabindex="0">16:9</label>
+  			<br>
+
+  			<!--Cinema 4D Options -->
+  			<input type="checkbox" id="c4d_checkbox_main" name="c4d[]">
+  			<label class=checkBoxLabelMain for="c4d_checkbox_main" id="c4d_checkBoxLabelMain" tabindex="0">Cinema 4D</label>
+  			<br>
+
+  	    <input type="submit" name="submit" value="Create Project" disabled>
+  	  </form>
+  	</div>
 
     <script>
       // You can also require other files to run in this process
