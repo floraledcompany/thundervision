@@ -103,7 +103,7 @@ $( document ).ready(function() {
       $('#ae_ribbons').prop('checked', true);
       $("#ae_1").css("color","#FF5200");
     }
-    if (settings.get('ae.hd_vidoe')) {
+    if (settings.get('ae.hd_video')) {
       $('#ae_hd_video').prop('checked', true);
       $("#ae_2").css("color","#FF5200");
     }
@@ -277,6 +277,9 @@ $( document ).ready(function() {
     //set directories
     var projectDirectory = project.directory + '/' + project.title + '/';
     var templateDirectory = project.templates + '/';
+    //declare project type variables
+    var projectType = [];
+    var projectSubType = [];
     //declare folders
     var project_files, gfx_assets, video_assets, audio_assets, docs, exports_folder,
     ae, pr, c4d, tex, _working_renders, _previous1, _previous2, _previous3, _previous4;
@@ -373,36 +376,55 @@ $( document ).ready(function() {
       //check ae
       if (project.aeOptions.state) {
         aeProjectTitle = ae + project.title + " 01.aep";
+        projectType.push('After Effects');
         if (!project.aeOptions.south_board && !project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_00.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
         } else if (project.aeOptions.south_board && !project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_1.aep";
+          projectSubType.push('South Board');
           fs.copyFileSync(aeTemp, aeProjectTitle);
         } else if (!project.aeOptions.south_board && project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_2.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
+          projectSubType.push('Ribbons');
         }
         else if (!project.aeOptions.south_board && !project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_3.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
+          projectSubType.push('1920x1080');
+
         }
         else if (project.aeOptions.south_board && project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_4.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
+          projectSubType.push('South Board');
+          projectSubType.push(' Ribbons');
         }
         else if (project.aeOptions.south_board && !project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_5.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
+          projectSubType.push('South Board');
+          projectSubType.push(' 1920x1080');
         }
         else if (!project.aeOptions.south_board && project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_6.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
+          projectSubType.push('Ribbons');
+          projectSubType.push(' 1920x1080');
+        }
+        else if (project.aeOptions.south_board && project.aeOptions.ribbons && project.aeOptions.hd_video) {
+          aeTemp = templateDirectory + "ae_temp_7.aep";
+          fs.copyFileSync(aeTemp, aeProjectTitle);
+          projectSubType.push('South Board');
+          projectSubType.push(' Ribbons');
+          projectSubType.push(' 1920x1080');
         }
       }
       //check pr
       if (project.prOptions.state) {
         prProjectTitle = pr + project.title + " 01.prproj";
+        projectType.push(' Premiere Pro');
         if (!project.prOptions.south_board && !project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_00.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
@@ -410,22 +432,48 @@ $( document ).ready(function() {
         if (project.prOptions.south_board && !project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_1.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
+          if (projectSubType.indexOf('South Board') < 0) {
+            projectSubType.push('South Board');
+          }
         }
         if (!project.prOptions.south_board && project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_2.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
+          if (projectSubType.indexOf(' 1920x1080') < 0) {
+          projectSubType.push(' 1920x1080');
+          }
         }
         if (project.prOptions.south_board && project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_3.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
+          if (projectSubType.indexOf('South Board') < 0) {
+            projectSubType.push('South Board');
+          }
+          if (projectSubType.indexOf(' 1920x1080') < 0) {
+          projectSubType.push(' 1920x1080');
+          }
         }
       }
       //check c4d
       if (project.c4dOptions.state) {
         c4dProjectTitle = c4d + project.title + " 01.c4d";
+        projectType.push(' Cinema4D');
         c4dTemp = templateDirectory + "c4d_temp_00.c4d";
         fs.copyFileSync(c4dTemp, c4dProjectTitle);
       }
+    }
+    //create project info file
+    function createProjectInfo() {
+      var projectInfoDoc = docs + "project-info.txt"
+      var date = new Date();
+
+      fs.writeFile(projectInfoDoc, '\nTHUNDERVISION VIDEO PROJECT\n\n' + 'Project title:\t\t'
+      + project.title + '\nCreated:\t\t' + date + '\nProject Type(s):\t' + projectType
+      + '\nFormat(s):\t\t' + projectSubType + '\n\nNOTES [please log DATE and AUTHOR for each update]:',
+      function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
     }
 
     //execute project directory creation
@@ -434,6 +482,7 @@ $( document ).ready(function() {
     createSubFolders();
     //execute file placement
     createProjectFiles();
+    createProjectInfo();
     //save info for next time
     settings.set('paths', {
       project_directory: project.directory,
@@ -472,6 +521,6 @@ $( document ).ready(function() {
     //   console.log(project.c4dOptions);
     // }
     // printProject();
-    app.quit();
+    // app.quit();
   });
 });
