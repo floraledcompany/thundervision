@@ -31,7 +31,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 700, height: 720,
     icon: 'icons/thundervision_icon_pngs/512x512.png',
-    titleBarStyle: 'hidden',
+    titleBarStyle: 'hiddenInset',
     webPreferences: { nodeIntegration: true }
   })
 

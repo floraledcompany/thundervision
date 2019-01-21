@@ -47,6 +47,7 @@ input[type=button] {
   cursor: pointer;
 	/* box-shadow: inset 0px 0px 20px 1px #EE5000; */
 	text-align: center;
+  -webkit-app-region: no-drag;
 
 }
 
@@ -57,6 +58,8 @@ input[type=button] {
 	/* background-color: #FF5200; */
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
+  -webkit-app-region: no-drag;
+
 }
 
 input[type=submit] {
@@ -71,6 +74,8 @@ input[type=submit] {
   cursor: pointer;
 	/* box-shadow: inset 0px 0px 15px 1px #333; */
 	text-align: center;
+  -webkit-app-region: no-drag;
+
 }
 /*hide the original choose file buttons*/
 .directoryInput {
@@ -98,6 +103,8 @@ input[type=submit] {
 	border-bottom-left-radius: 4px;
   cursor: pointer;
 	text-align: center;
+  -webkit-app-region: no-drag;
+
 }
 
 /*checkboxes*/
@@ -138,6 +145,7 @@ form {
 body {
 	background-color: #171717;
   color: #FF5200;
+  -webkit-app-region: drag;
 }
 
 * {
