@@ -3,10 +3,12 @@ h1 {
 	text-align: center;
 	color: white;
 	margin: 20px;
+  -webkit-user-select: none;
 }
 
 h3 {
 	text-align: center;
+  -webkit-user-select: none;
 }
 
 /*Text Boxes*/
@@ -48,6 +50,7 @@ input[type=button] {
 	/* box-shadow: inset 0px 0px 20px 1px #EE5000; */
 	text-align: center;
   -webkit-app-region: no-drag;
+  -webkit-user-select: none;
 
 }
 
@@ -59,6 +62,7 @@ input[type=button] {
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
   -webkit-app-region: no-drag;
+  -webkit-user-select: none;
 
 }
 
@@ -75,6 +79,7 @@ input[type=submit] {
 	/* box-shadow: inset 0px 0px 15px 1px #333; */
 	text-align: center;
   -webkit-app-region: no-drag;
+  -webkit-user-select: none;
 
 }
 /*hide the original choose file buttons*/
@@ -104,6 +109,7 @@ input[type=submit] {
   cursor: pointer;
 	text-align: center;
   -webkit-app-region: no-drag;
+  -webkit-user-select: none;
 
 }
 
@@ -118,10 +124,12 @@ label {
 	font-size: 24px;
 	margin: auto;
 	width: 100%;
+  -webkit-user-select: none;
 }
 
 #secondaryLabel {
 	color: lightGray;
+  -webkit-user-select: none;
 }
 
 .checkBoxLabel {
@@ -129,23 +137,27 @@ label {
 	color: #333;
 	margin-left: 0;
 	margin-right: 0;
+  -webkit-user-select: none;
 }
 
 
 .checkBoxLabelMain {
 	font-size: 24px;
 	color: gray;
+  -webkit-user-select: none;
 }
 
 /*general elements*/
 form {
 	background-color: #171717;
+  -webkit-user-select: none;
 }
 
 body {
 	background-color: #171717;
   color: #FF5200;
   -webkit-app-region: drag;
+  -webkit-user-select: none;
 }
 
 * {
