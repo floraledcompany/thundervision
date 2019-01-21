@@ -7,6 +7,8 @@
 const fs = require('fs'); // Load the File System
 const settings = require('electron').remote.require('electron-settings');
 const app = require('electron').remote.app;
+const BrowserWindow = require('electron').remote.BrowserWindow;
+// const delay = require('delay');
 // settings.setPath('/Users/lf/desktop/tv project settings/user-settings.json'); //debug
 
 //declare form validity variables
@@ -43,8 +45,16 @@ function checkFormValidity(){
 
   if (checkTextValidity()) {
     $("input[type='submit']").attr("disabled", false);
+    $("input[type='submit']").val("Create Project");
+    $("input[type='submit']").css({"background-color": "#EE5000", "color":"white"});
+
+
   } else {
     $("input[type='submit']").attr("disabled", true);
+    $("input[type='submit']").val("Create Project");
+    $("input[type='submit']").css({"background-color": "gray", "color":"white"});
+
+
   }
 }
 
@@ -467,7 +477,7 @@ $( document ).ready(function() {
       var projectInfoDoc = docs + "project-info.txt"
       var date = new Date();
 
-      fs.writeFile(projectInfoDoc, '\nTHUNDERVISION VIDEO PROJECT\n\n' + 'Project title:\t\t'
+      fs.writeFile(projectInfoDoc, '\nTHUNDERVISION VIDEO PROJECT\n\n' + 'Project Title:\t\t'
       + project.title + '\nCreated:\t\t' + date + '\nProject Type(s):\t' + projectType
       + '\nFormat(s):\t\t' + projectSubType + '\n\nNOTES [please log DATE and AUTHOR for each update]:',
       function (err) {
@@ -521,6 +531,15 @@ $( document ).ready(function() {
     //   console.log(project.c4dOptions);
     // }
     // printProject();
+    // await new Promise(done => setTimeout(done, 5000));
+
     // app.quit();
+    // var window = BrowserWindow.getCurrentWindow();
+    // window.close();
+    $("input[type='submit']").attr("disabled", true);
+    $("input[type='submit']").val("Project Created!");
+    $("input[type='submit']").css({"background-color": "green", "color":"lightgray"});
+
+
   });
 });
