@@ -3,6 +3,7 @@ const {app, BrowserWindow, Menu} = require('electron');
 const dialog = app.dialog;
 const path = require('path');
 const settings = require('electron-settings');
+const { ipcMain } = require('electron');
 
 // const Store = require('./store.js');
 
@@ -122,6 +123,16 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+// listen the 'app_quit' event
+ipcMain.on('app_quit', (event, info) => {
+    if (prefSave_FLAG == true) {app.quit()}
+    // else {ipcMain.send('noSave');}
+})
+var prefSave_FLAG
+ipcMain.on('prefSave', (event, info) => {
+  prefSave_FLAG = true;
 })
 
 // In this file you can include the rest of your app's specific main process

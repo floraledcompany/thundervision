@@ -186,6 +186,7 @@ input[type=submit]:disabled {
 input[type=text]:focus {
 	box-shadow: inset 0px 0px 0px 2px white;
 	background-color: #lightGray;
+	outline:0;
 }
 
 #pdestination:focus, #temploc:focus{

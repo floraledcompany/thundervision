@@ -2,12 +2,15 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-//Jquery test
-// $("h1").text("YESSSS!!!! THIS IS THUNDERVISION!")
+//// DEBUG:
+
+
+//DECLARE LIBRARIES
 const fs = require('fs'); // Load the File System
 const settings = require('electron').remote.require('electron-settings');
 const app = require('electron').remote.app;
 const BrowserWindow = require('electron').remote.BrowserWindow;
+const { ipcRenderer } = require('electron');
 // const delay = require('delay');
 // settings.setPath('/Users/lf/desktop/tv project settings/user-settings.json'); //debug
 
@@ -18,7 +21,7 @@ var titleValid, patValid, templateValid;
 function checkTextValidity() {
   titleValid = $("#ptitle")[0].checkValidity();
   pathValid = $("#pdestination")[0].checkValidity();
-  $("#temploc").attr("placeholder", "...")
+  $("#temploc").attr("placeholder", "...");
 
 
   //check if templates are needed and double check template location
@@ -26,7 +29,7 @@ function checkTextValidity() {
     templateValid = $("#temploc")[0].checkValidity();
     if(titleValid && pathValid && templateValid){
       return true;
-    } else if(templateValid != true) {
+    } else if (templateValid != true) {
       $("#temploc").attr("placeholder", "SELECT TEMPLATE LOCATION")
     } else {
       return false;
@@ -383,107 +386,127 @@ $( document ).ready(function() {
     //copy templates into new project directory and rename the files
     function createProjectFiles() {
       var aeProjectTitle, prProjectTitle, c4dProjectTitle;
+      var south_board_FLAG, ribbons_FLAG, hd_video_FLAG;
+
+      function enterSubtype(entry) {
+        switch(entry) {
+          case 'South Board':
+            if (!south_board_FLAG) {projectSubType.push(entry);}
+            south_board_FLAG = true;
+            break;
+          case 'Ribbons':
+            if (!ribbons_FLAG) {projectSubType.push(entry);}
+            ribbons_FLAG = true;
+            break;
+          case '1920x1080':
+            if (!hd_video_FLAG) {projectSubType.push(entry);}
+            hd_video_FLAG = true;
+            break;
+        }
+        //DEBUG
+        // console.log(entry);
+        // console.log(projectSubType);
+        // $('h1').css('color','yellow');
+      }
+
       //check ae
       if (project.aeOptions.state) {
         aeProjectTitle = ae + project.title + " 01.aep";
         projectType.push('After Effects');
+        console.log('AFTER EFFECTS!');
         if (!project.aeOptions.south_board && !project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_00.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
         } else if (project.aeOptions.south_board && !project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_1.aep";
-          projectSubType.push('South Board');
+          enterSubtype('South Board');
+
           fs.copyFileSync(aeTemp, aeProjectTitle);
         } else if (!project.aeOptions.south_board && project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_2.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
-          projectSubType.push('Ribbons');
+          enterSubtype('Ribbons');
         }
         else if (!project.aeOptions.south_board && !project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_3.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
-          projectSubType.push('1920x1080');
-
+          enterSubtype('1920x1080');
         }
         else if (project.aeOptions.south_board && project.aeOptions.ribbons && !project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_4.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
-          projectSubType.push('South Board');
-          projectSubType.push(' Ribbons');
+          enterSubtype('South Board');
+          enterSubtype('Ribbons');
+
         }
         else if (project.aeOptions.south_board && !project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_5.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
-          projectSubType.push('South Board');
-          projectSubType.push(' 1920x1080');
+          enterSubtype('South Board');
+          enterSubtype('1920x1080');
         }
         else if (!project.aeOptions.south_board && project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_6.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
-          projectSubType.push('Ribbons');
-          projectSubType.push(' 1920x1080');
+          enterSubtype('Ribbons');
+          enterSubtype('1920x1080');
+
         }
         else if (project.aeOptions.south_board && project.aeOptions.ribbons && project.aeOptions.hd_video) {
           aeTemp = templateDirectory + "ae_temp_7.aep";
           fs.copyFileSync(aeTemp, aeProjectTitle);
-          projectSubType.push('South Board');
-          projectSubType.push(' Ribbons');
-          projectSubType.push(' 1920x1080');
+          enterSubtype('South Board');
+          enterSubtype('Ribbons');
+          enterSubtype('1920x1080');
         }
       }
       //check pr
       if (project.prOptions.state) {
         prProjectTitle = pr + project.title + " 01.prproj";
-        projectType.push(' Premiere Pro');
+        projectType.push('Premiere Pro');
         if (!project.prOptions.south_board && !project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_00.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
-        }
-        if (project.prOptions.south_board && !project.prOptions.hd_video) {
+        } else if (project.prOptions.south_board && !project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_1.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
-          if (projectSubType.indexOf('South Board') < 0) {
-            projectSubType.push('South Board');
-          }
-        }
-        if (!project.prOptions.south_board && project.prOptions.hd_video) {
+          enterSubtype('South Board');
+        } else if (!project.prOptions.south_board && project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_2.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
-          if (projectSubType.indexOf(' 1920x1080') < 0) {
-          projectSubType.push(' 1920x1080');
-          }
-        }
-        if (project.prOptions.south_board && project.prOptions.hd_video) {
+          enterSubtype('1920x1080');
+        } else if (project.prOptions.south_board && project.prOptions.hd_video) {
           prTemp = templateDirectory + "pr_temp_3.prproj";
           fs.copyFileSync(prTemp, prProjectTitle);
-          if (projectSubType.indexOf('South Board') < 0) {
-            projectSubType.push('South Board');
-          }
-          if (projectSubType.indexOf(' 1920x1080') < 0) {
-          projectSubType.push(' 1920x1080');
-          }
+          enterSubtype('South Board');
+          enterSubtype('1920x1080');
         }
       }
       //check c4d
       if (project.c4dOptions.state) {
         c4dProjectTitle = c4d + project.title + " 01.c4d";
-        projectType.push(' Cinema4D');
+        projectType.push('Cinema4D');
         c4dTemp = templateDirectory + "c4d_temp_00.c4d";
         fs.copyFileSync(c4dTemp, c4dProjectTitle);
       }
+      ipcRenderer.send('prefSave');
     }
     //create project info file
     function createProjectInfo() {
       var projectInfoDoc = docs + "project-info.txt"
       var date = new Date();
+      var projectLine = projectType.join(', ');
+      var subProjectLine = projectSubType.join(', ');
 
-      fs.writeFile(projectInfoDoc, '\nTHUNDERVISION VIDEO PROJECT\n\n' + 'Project Title:\t\t'
-      + project.title + '\nCreated:\t\t' + date + '\nProject Type(s):\t' + projectType
-      + '\nFormat(s):\t\t' + projectSubType + '\n\nNOTES [please log DATE and AUTHOR for each update]:',
+      fs.writeFileSync(projectInfoDoc, '\nTHUNDERVISION VIDEO PROJECT\n\n' + 'Project Title:\t\t'
+      + project.title + '\nCreated:\t\t' + date + '\nProject Type(s):\t' + projectLine
+      + '\nFormat(s):\t\t' + subProjectLine + '\n\nNOTES [please log DATE and AUTHOR for each update]:',
       function (err) {
         if (err) throw err;
-        console.log('Saved!');
       });
+      ipcRenderer.send('app_quit');
+      console.log('Saved!');
+
     }
 
     //execute project directory creation
@@ -493,6 +516,7 @@ $( document ).ready(function() {
     //execute file placement
     createProjectFiles();
     createProjectInfo();
+
     //save info for next time
     settings.set('paths', {
       project_directory: project.directory,
@@ -516,21 +540,21 @@ $( document ).ready(function() {
 
     //DEBUG
     // console.log(settings.get('name.title'));
-    // let printProject = ()=> {
-    //   console.log(project.title);
-    //   console.log(project.directory);
-    //   console.log(project.templates);
-    //   console.log(project.aeOptions);
-    //   // console.log(project.aeOptions.state);
-    //   // console.log(project.aeOptions.south_board);
-    //   // console.log(project.aeOptions.ribbons);
-    //   // console.log(project.aeOptions.hd_video);
-    //   console.log(project.prOptions);
-    //   // console.log(project.prOptions.south_board);
-    //   // console.log(project.prOptions.hd_video);
-    //   console.log(project.c4dOptions);
-    // }
-    // printProject();
+    let printProject = ()=> {
+      console.log(project.title);
+      console.log(project.directory);
+      console.log(project.templates);
+      console.log(project.aeOptions);
+      // console.log(project.aeOptions.state);
+      // console.log(project.aeOptions.south_board);
+      // console.log(project.aeOptions.ribbons);
+      // console.log(project.aeOptions.hd_video);
+      console.log(project.prOptions);
+      // console.log(project.prOptions.south_board);
+      // console.log(project.prOptions.hd_video);
+      console.log(project.c4dOptions);
+    }
+    printProject();
     // await new Promise(done => setTimeout(done, 5000));
 
     // app.quit();
@@ -539,7 +563,10 @@ $( document ).ready(function() {
     $("input[type='submit']").attr("disabled", true);
     $("input[type='submit']").val("Project Created!");
     $("input[type='submit']").css({"background-color": "green", "color":"lightgray"});
-
+    // app.quit();
 
   });
+  // ipcRenderer.on('noSave', (event, info) => {
+  //
+  // });
 });
