@@ -14,7 +14,6 @@ const { ipcRenderer } = require('electron');
 const path = require('path');
 // const delay = require('delay');
 // settings.setPath('/Users/lf/desktop/tv project settings/user-settings.json'); //debug
-
 //declare form validity variables
 var titleValid, patValid, templateValid;
 
@@ -485,7 +484,7 @@ $( document ).ready(function() {
         c4dTemp = path.join(templateDirectory, 'c4d_temp_00.c4d');
         fs.copyFileSync(c4dTemp, c4dProjectTitle);
       }
-      ipcRenderer.send('prefSave');
+      // ipcRenderer.send('prefSave');
     }
     //create project info file
     function createProjectInfo() {
@@ -570,6 +569,8 @@ $( document ).ready(function() {
         am_pm = ' am';
       }
       minute = date.getMinutes();
+      if (date.getMinutes() < 10) {minute = '0' + date.getMinutes();}
+        else {minute = date.getMinutes();}
       date_string = day + month + calender_day + ' ' + year + ' at ' + hour +
         ':' + minute + am_pm;
 
@@ -586,11 +587,11 @@ $( document ).ready(function() {
       '######## [please log DATE and AUTHOR for each update]: ########\n' +
       '###############################################################\n\n' +
       (date.getMonth() + 1) + '-' + calender_day + '-' + year + ':' +
-      '\n- project created',
+      '\nproject created',
       function (err) {
         if (err) throw err;
       });
-      ipcRenderer.send('app_quit');
+      // ipcRenderer.send('app_quit');
       // console.log('Saved!');
 
     }
@@ -622,6 +623,8 @@ $( document ).ready(function() {
     settings.set('c4d', {
       state: project.c4dOptions.state
     });
+    ipcRenderer.send('prefSave');
+
 
 
     //DEBUG
@@ -650,6 +653,8 @@ $( document ).ready(function() {
     $("input[type='submit']").val("Project Created!");
     $("input[type='submit']").css({"background-color": "green", "color":"lightgray"});
     // app.quit();
+    ipcRenderer.send('app_quit');
+
 
   });
   // ipcRenderer.on('noSave', (event, info) => {
