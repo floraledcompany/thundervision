@@ -11,6 +11,7 @@ const settings = require('electron').remote.require('electron-settings');
 const app = require('electron').remote.app;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const { ipcRenderer } = require('electron');
+const path = require('path');
 // const delay = require('delay');
 // settings.setPath('/Users/lf/desktop/tv project settings/user-settings.json'); //debug
 
@@ -245,23 +246,13 @@ $( document ).ready(function() {
 
   //VALIDATION AND SUBMIT ACTIVATION/////////////////////////
   $("input[type='text']").on("change paste keyup", function() {
-    // titleValid = $("#ptitle")[0].checkValidity();
-    // pathValid = $("#pdestination")[0].checkValidity();
-    // templateValid = $("#temploc")[0].checkValidity();
-    //
-    // if(titleValid+pathValid+templateValid == 3){
-    //   $("input[type='submit']").attr("disabled", false);
-    // } else {
-    //   $("input[type='submit']").attr("disabled", true);
-    // }
     if ($("#ptitle").val().length > 1) {
       $("#pdestination").attr("placeholder","CHOOSE PROJECT DESTINATION")
     } else {
       $("#pdestination").attr("placeholder","...")
-
     }
     checkFormValidity();
- });
+  });
 
   //SUBMIT THE FORM
   $("input[type='submit']").click(function(e){
@@ -288,8 +279,12 @@ $( document ).ready(function() {
     }
 
     //set directories
-    var projectDirectory = project.directory + '/' + project.title + '/';
-    var templateDirectory = project.templates + '/';
+    var projectDirectory = path.join(project.directory, project.title);
+    var templateDirectory = project.templates;
+    // DEBUG:
+    console.log("Project Directory: " + projectDirectory);
+    console.log("Template Directory: " + templateDirectory);
+
     //declare project type variables
     var projectType = [];
     var projectSubType = [];
@@ -300,26 +295,25 @@ $( document ).ready(function() {
     var aeTemp, prTemp, c4dTemp;
     //asign folder paths
     function assignFolderPaths() {
-     project_files = projectDirectory + "01 project files/";
-     gfx_assets = projectDirectory + "02 gfx assets/";
-     video_assets = projectDirectory + "03 video assets/";
-     audio_assets = projectDirectory + "04 audio assets/";
-     docs = projectDirectory + "05 docs/";
-     exports_folder = projectDirectory + "06 exports/";
-     ae = project_files + "ae/";
-     _previous1 = ae + "_PREVIOUS/";
-     pr = project_files + "pr/";
-     _previous2 = pr + "_PREVIOUS/";
-     c4d = project_files + "c4d/";
-     tex = c4d + "tex/";
-     _previous3 = c4d + "_PREVIOUS/";
-     _working_renders = gfx_assets + "_working renders/";
-     _previous4 = exports_folder + "_PREVIOUS/";
 
-   }
+      project_files = path.join(projectDirectory, '01 project files');
+      gfx_assets = path.join(projectDirectory, '02 gfx assets');
+      video_assets = path.join(projectDirectory, '03 video assets');
+      audio_assets= path.join(projectDirectory, '04 audio assets');
+      docs = path.join(projectDirectory, '05 docs');
+      exports_folder = path.join(projectDirectory, '06 exports');
+      ae = path.join(project_files, 'ae');
+      _previous1 = path.join(ae, '_PREVIOUS');
+      pr = path.join(project_files, 'pr');
+      _previous2 = path.join(pr, '_PREVIOUS');
+      c4d = path.join(project_files, 'c4d');
+      tex = path.join(c4d, 'tex');
+      _previous3 = path.join(c4d, '_PREVIOUS');
+      _working_renders = path.join(gfx_assets, '_working renders');
+      _previous4 = path.join(exports_folder, '_PREVIOUS');
+    }
     //create project directory
     function createProjectDirectory() {
-    // var projectDirectory = project.directory + '/' + project.title + '/';
       fs.mkdirSync(projectDirectory, (err) => {
         if (err) throw err;
       });
@@ -411,49 +405,50 @@ $( document ).ready(function() {
 
       //check ae
       if (project.aeOptions.state) {
-        aeProjectTitle = ae + project.title + " 01.aep";
+        aeProjectTitle = path.join(ae, (project.title + ' 01.aep'));
         projectType.push('After Effects');
-        console.log('AFTER EFFECTS!');
+        // console.log('AFTER EFFECTS!');       //DEBUG
+        console.log(aeProjectTitle);            //DEBUG
         if (!project.aeOptions.south_board && !project.aeOptions.ribbons && !project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_00.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_00.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
         } else if (project.aeOptions.south_board && !project.aeOptions.ribbons && !project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_1.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_1.aep');
           enterSubtype('South Board');
 
           fs.copyFileSync(aeTemp, aeProjectTitle);
         } else if (!project.aeOptions.south_board && project.aeOptions.ribbons && !project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_2.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_2.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
           enterSubtype('Ribbons');
         }
         else if (!project.aeOptions.south_board && !project.aeOptions.ribbons && project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_3.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_3.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
           enterSubtype('1920x1080');
         }
         else if (project.aeOptions.south_board && project.aeOptions.ribbons && !project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_4.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_4.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
           enterSubtype('South Board');
           enterSubtype('Ribbons');
 
         }
         else if (project.aeOptions.south_board && !project.aeOptions.ribbons && project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_5.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_5.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
           enterSubtype('South Board');
           enterSubtype('1920x1080');
         }
         else if (!project.aeOptions.south_board && project.aeOptions.ribbons && project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_6.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_6.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
           enterSubtype('Ribbons');
           enterSubtype('1920x1080');
 
         }
         else if (project.aeOptions.south_board && project.aeOptions.ribbons && project.aeOptions.hd_video) {
-          aeTemp = templateDirectory + "ae_temp_7.aep";
+          aeTemp = path.join(templateDirectory, 'ae_temp_7.aep');
           fs.copyFileSync(aeTemp, aeProjectTitle);
           enterSubtype('South Board');
           enterSubtype('Ribbons');
@@ -462,21 +457,22 @@ $( document ).ready(function() {
       }
       //check pr
       if (project.prOptions.state) {
-        prProjectTitle = pr + project.title + " 01.prproj";
+        // prProjectTitle = pr + project.title + " 01.prproj";
+        prProjectTitle = path.join(pr, (project.title + ' 01.prproj'));
         projectType.push('Premiere Pro');
         if (!project.prOptions.south_board && !project.prOptions.hd_video) {
-          prTemp = templateDirectory + "pr_temp_00.prproj";
+          prTemp = path.join(templateDirectory, 'pr_temp_00.prproj');
           fs.copyFileSync(prTemp, prProjectTitle);
         } else if (project.prOptions.south_board && !project.prOptions.hd_video) {
-          prTemp = templateDirectory + "pr_temp_1.prproj";
+          prTemp = path.join(templateDirectory, 'pr_temp_1.prproj');
           fs.copyFileSync(prTemp, prProjectTitle);
           enterSubtype('South Board');
         } else if (!project.prOptions.south_board && project.prOptions.hd_video) {
-          prTemp = templateDirectory + "pr_temp_2.prproj";
+          prTemp = path.join(templateDirectory, 'pr_temp_2.prproj');
           fs.copyFileSync(prTemp, prProjectTitle);
           enterSubtype('1920x1080');
         } else if (project.prOptions.south_board && project.prOptions.hd_video) {
-          prTemp = templateDirectory + "pr_temp_3.prproj";
+          prTemp = path.join(templateDirectory, 'pr_temp_3.prproj');
           fs.copyFileSync(prTemp, prProjectTitle);
           enterSubtype('South Board');
           enterSubtype('1920x1080');
@@ -484,28 +480,118 @@ $( document ).ready(function() {
       }
       //check c4d
       if (project.c4dOptions.state) {
-        c4dProjectTitle = c4d + project.title + " 01.c4d";
+        c4dProjectTitle = path.join(c4d, (project.title + ' 01.c4d'));
         projectType.push('Cinema4D');
-        c4dTemp = templateDirectory + "c4d_temp_00.c4d";
+        c4dTemp = path.join(templateDirectory, 'c4d_temp_00.c4d');
         fs.copyFileSync(c4dTemp, c4dProjectTitle);
       }
       ipcRenderer.send('prefSave');
     }
     //create project info file
     function createProjectInfo() {
-      var projectInfoDoc = docs + "project-info.txt"
+      var projectInfoDoc = path.join(docs, (project.title + '-info.txt'));
       var date = new Date();
+      var day, month, calender_day, year, hour, am_pm, minute, date_string;
       var projectLine = projectType.join(', ');
       var subProjectLine = projectSubType.join(', ');
 
-      fs.writeFileSync(projectInfoDoc, '\nTHUNDERVISION VIDEO PROJECT\n\n' + 'Project Title:\t\t'
-      + project.title + '\nCreated:\t\t' + date + '\nProject Type(s):\t' + projectLine
-      + '\nFormat(s):\t\t' + subProjectLine + '\n\nNOTES [please log DATE and AUTHOR for each update]:',
+      //Set Date Variables
+      switch (date.getDay()) {
+        case 0:
+          day = 'Sun ';
+          break;
+        case 1:
+          day = 'Mon ';
+          break;
+        case 2:
+          day = 'Tue ';
+          break;
+        case 3:
+          day = 'Wed ';
+          break;
+        case 4:
+          day = 'Thu';
+          break;
+        case 5:
+          day = 'Fri ';
+          break;
+        case 6:
+          day = 'Sat ';
+          break;
+      }
+      switch (date.getMonth()) {
+        case 0:
+          month = 'Jan ';
+          break;
+        case 1:
+          month = 'Feb ';
+          break;
+        case 2:
+          month = 'Mar ';
+          break;
+        case 3:
+          month = 'Apr ';
+          break;
+        case 4:
+          month = 'May ';
+          break;
+        case 5:
+          month = 'Jun ';
+          break;
+        case 6:
+          month = 'Jul ';
+          break;
+        case 7:
+          month = 'Aug ';
+          break;
+        case 8:
+          month = 'Sep ';
+          break;
+        case 9:
+          month = 'Oct ';
+          break;
+        case 10:
+          month = 'Nov ';
+          break;
+        case 11:
+          month = 'Dec ';
+          break;
+      }
+      calender_day = date.getDate();
+      year = date.getFullYear();
+      hour = date.getHours();
+      if (hour > 12) {
+        am_pm = ' pm';
+        console.log(hour);
+        hour = hour - 12;
+        console.log(hour + ' part 2');
+      } else {
+        if (hour == 0) {hour = 12;}
+        am_pm = ' am';
+      }
+      minute = date.getMinutes();
+      date_string = day + month + calender_day + ' ' + year + ' at ' + hour +
+        ':' + minute + am_pm;
+
+
+      fs.writeFileSync(projectInfoDoc,
+      '###############################################################' +
+      '\n################# THUNDERVISION VIDEO PROJECT #################\n' +
+      '###############################################################\n' +
+      'Project Title:\t\t' + project.title + '\nCreated:\t\t' + date_string +
+      '\nProject Type(s):\t' + projectLine + '\nFormat(s):\t\t' + subProjectLine +
+      '\n###############################################################\n' +
+      '###############################################################' +
+      '\n\n############################ NOTES ############################\n' +
+      '######## [please log DATE and AUTHOR for each update]: ########\n' +
+      '###############################################################\n\n' +
+      (date.getMonth() + 1) + '-' + calender_day + '-' + year + ':' +
+      '\n- project created',
       function (err) {
         if (err) throw err;
       });
       ipcRenderer.send('app_quit');
-      console.log('Saved!');
+      // console.log('Saved!');
 
     }
 
@@ -554,7 +640,7 @@ $( document ).ready(function() {
       // console.log(project.prOptions.hd_video);
       console.log(project.c4dOptions);
     }
-    printProject();
+    // printProject();
     // await new Promise(done => setTimeout(done, 5000));
 
     // app.quit();

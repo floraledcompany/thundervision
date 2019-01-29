@@ -128,7 +128,7 @@ app.on('activate', function () {
 // listen the 'app_quit' event
 ipcMain.on('app_quit', (event, info) => {
     if (prefSave_FLAG == true) {app.quit()}
-    // else {ipcMain.send('noSave');}
+    else {ipcMain.send('noSave');}
 })
 var prefSave_FLAG
 ipcMain.on('prefSave', (event, info) => {
