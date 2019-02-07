@@ -250,11 +250,11 @@ input[type=button]:active {
 	background-color: white;
 }
 
-input[type=checkbox]:hover {
+/* input[type=checkbox]:hover {
 	color: #FF5200;
 }
 
-#checkBoxLabelMain:hover {
+#ae_checkBoxLabelMain:hover {
 	color: #FF5200;
 }
 
@@ -268,4 +268,4 @@ input[type=checkbox]:checked + #checkBoxLabel {
 
 #ae_checkbox_main:checked + #checkBoxLabel {
 	color: white;
-}
+} */
