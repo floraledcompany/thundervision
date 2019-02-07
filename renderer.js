@@ -571,7 +571,7 @@ $( document ).ready(function() {
       minute = date.getMinutes();
       if (date.getMinutes() < 10) {minute = '0' + date.getMinutes();}
         else {minute = date.getMinutes();}
-      date_string = day + month + calender_day + ' ' + year + ' at ' + hour +
+      date_string = day + ' ' + month + calender_day + ' ' + year + ' at ' + hour +
         ':' + minute + am_pm;
 
 
