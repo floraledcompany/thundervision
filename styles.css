@@ -6,9 +6,26 @@ h1 {
   -webkit-user-select: none;
 }
 
+#helpTitle {
+	color: #FF5200;
+}
+
 h3 {
 	text-align: center;
   -webkit-user-select: none;
+}
+
+h4 {
+	text-align: center;
+	-webkit-user-select: none;
+	opacity: .5;
+
+}
+
+h5 {
+	color: #FF5200;
+	margin: 5px;
+	font-size: 18px;
 }
 
 /*Text Boxes*/
@@ -155,7 +172,7 @@ form {
 
 body {
 	background-color: #171717;
-  color: #FF5200;
+  color: white;
   -webkit-app-region: drag;
   -webkit-user-select: none;
 }
