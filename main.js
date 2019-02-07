@@ -80,11 +80,9 @@ const mainMenuTemplate = [
     label: 'File',
     submenu: [
       {
-        label: 'Quit',
-        accelerator: isMac ? 'Command+Q' : 'Ctrl+Q',
-        click(){
-          app.quit();
-        }
+        label: 'Select All',
+        role: 'selectall',
+        accelerator: isMac ? 'Command+A' : 'Ctrl+A'
       },
       {
         label: 'Close Window',
@@ -95,6 +93,13 @@ const mainMenuTemplate = [
           } else {
             mainWindow.close();
           }
+        }
+      },
+      {
+        label: 'Quit',
+        accelerator: isMac ? 'Command+Q' : 'Ctrl+Q',
+        click(){
+          app.quit();
         }
       }
     ]
