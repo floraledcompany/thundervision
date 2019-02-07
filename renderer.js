@@ -49,13 +49,13 @@ function checkFormValidity(){
   if (checkTextValidity()) {
     $("input[type='submit']").attr("disabled", false);
     $("input[type='submit']").val("Create Project");
-    $("input[type='submit']").css({"background-color": "#EE5000", "color":"white"});
+    // $("input[type='submit']").css({"background-color": "#EE5000", "color":"white"});
 
 
   } else {
     $("input[type='submit']").attr("disabled", true);
     $("input[type='submit']").val("Create Project");
-    $("input[type='submit']").css({"background-color": "gray", "color":"white"});
+    // $("input[type='submit']").css({"background-color": "gray", "color":"white"});
 
 
   }
@@ -653,7 +653,7 @@ $( document ).ready(function() {
     $("input[type='submit']").val("Project Created!");
     $("input[type='submit']").css({"background-color": "green", "color":"lightgray"});
     // app.quit();
-    ipcRenderer.send('app_quit');
+    ipcRenderer.send('app_quit', path.join(project.directory, project.title));
 
 
   });

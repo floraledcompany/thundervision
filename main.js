@@ -4,6 +4,7 @@ const dialog = app.dialog;
 const path = require('path');
 const settings = require('electron-settings');
 const { ipcMain } = require('electron');
+const { shell } = require('electron');
 
 // const Store = require('./store.js');
 
@@ -94,6 +95,7 @@ const mainMenuTemplate = [
         label: 'Documentation',
         click() {
           console.log('Clicked Documentation')    //DEBUG
+          
         }
       },
       {
@@ -127,7 +129,10 @@ app.on('activate', function () {
 
 // listen the 'app_quit' event
 ipcMain.on('app_quit', (event, info) => {
-    if (prefSave_FLAG == true) {app.quit()}
+    if (prefSave_FLAG == true) {
+      shell.showItemInFolder(info);
+      app.quit()
+    }
     // else {ipcMain.send('noSave');}
 })
 var prefSave_FLAG = false;
