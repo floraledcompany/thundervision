@@ -12,7 +12,7 @@ const { shell } = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow, helpWindow
 //check to see if its mac or windows (or linux i guess)
 const isMac = process.platform == 'darwin'
 // console.log(isMac)                          //DEBUG
@@ -85,6 +85,17 @@ const mainMenuTemplate = [
         click(){
           app.quit();
         }
+      },
+      {
+        label: 'Close Window',
+        accelerator: isMac ? 'Command+W' : 'Ctrl+W',
+        click(){
+          if (typeof helpWindow !== 'undefined' && helpWindow !== null) {
+            helpWindow.close();
+          } else {
+            mainWindow.close();
+          }
+        }
       }
     ]
   },
@@ -93,9 +104,11 @@ const mainMenuTemplate = [
     submenu: [
       {
         label: 'Documentation',
+        accelerator: isMac ? 'Command+H' : 'Ctrl+H',
         click() {
           console.log('Clicked Documentation')    //DEBUG
-          
+          createHelpWindow();
+
         }
       },
       {
@@ -105,6 +118,61 @@ const mainMenuTemplate = [
     ]
   }
 ];
+
+//// IMPORTED CODE
+// label: 'File',
+// submenu: [
+//  {
+//    label: 'Settings',
+//    accelerator: isMac ? 'Command+P' : 'Ctrl+P',
+//    click() {
+//      createSettingsWindow();
+//      mainWindow.webContents.send('settings_open');
+//    }
+//  },
+//  {
+//    label: 'Close Window',
+//    accelerator: isMac ? 'Command+W' : 'Ctrl+W',
+//    click(){
+//      if (typeof settingsWindow !== 'undefined' && settingsWindow !== null) {
+//        settingsWindow.close();
+//      } else {
+//        mainWindow.close();
+//      }
+//    }
+//  },
+//  {
+//    label: 'Quit',
+//    accelerator: isMac ? 'Command+Q' : 'Ctrl+Q',
+// @ -104,6 +126,30 @@ const mainMenuTemplate = [
+// }
+// ];
+
+function createHelpWindow () {
+// let { width, height } = store.get('windowBounds');
+// Create the browser window.
+  helpWindow = new BrowserWindow({
+    width: 500, height: 900,
+    icon: 'icons/thundervision_icon_pngs/512x512.png',
+    titleBarStyle: 'hiddenInset',
+    webPreferences: { nodeIntegration: true }
+  })
+
+  // and load the index.html of the app.
+  helpWindow.loadFile('help.html')
+
+  // Open the DevTools.
+  // mainWindow.webContents.openDevTools()
+
+  // Emitted when the window is closed.
+  helpWindow.on('closed', function () {
+  // Dereference the window object, usually you would store windows
+  // in an array if your app supports multi windows, this is the time
+  // when you should delete the corresponding element.
+    helpWindow = null
+  })
+}
+//// END IMPORTED CODE
 
 // if(isMac){
 //   mainMenuTemplate.unshift({});
