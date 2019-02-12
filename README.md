@@ -1,6 +1,6 @@
 # thundervision
-<b>Purpose:</b>
-To provide a fast and easy way to create, populate, and name new project directories in a consistent fasion. Projects in this case refers specifically to the video production projects started by the Thundervision department of the Denver Broncos.
+<b>Purpose:
+To provide a fast and easy way to create, populate, and name new project directories in a consistent fasion. Projects in this case refers specifically to the video production projects started by the Thundervision department of the Denver Broncos.</b>
 
 This application works identically on macOS and Windows (tested on macOS 10.14 and Windows 10 1793).
 
