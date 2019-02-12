@@ -4,7 +4,7 @@ To provide a fast and easy way to create, populate, and name new project directo
 
 This application works identically on macOS and Windows (tested on macOS 10.14 and Windows 10 1793).
 
-Template projects are copied from a custom template directory upon project creation. These base templates can be fully customized.
+Template projects are copied from a custom template directory ('tv project templates/') upon project creation. These base templates can be fully customized.
 
 Previous settings are saved via a small .json text document in the default location for app data. Admin privileges are needed for this functionality.
 
