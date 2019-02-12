@@ -39,6 +39,7 @@ function createWindow () {
     webPreferences: { nodeIntegration: true }
   })
 
+
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
 
@@ -59,6 +60,12 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
+  // windowAdjust(mainWindow)
+
+  // adjust size of window for windows
+  if (isMac == false) {
+    mainWindow.setSize(710, 775)
+  }
 
   //build menu
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
